@@ -35,7 +35,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
-      - name: Build only
+      - name: Build Image Builder container
         uses: docker/build-push-action@v2.4.0
         with:
           cache-from: type=local,src=/tmp/.buildx-cache
@@ -46,9 +46,17 @@ jobs:
           push: false
           tags: imagebuilder:latest
 
-      - name: Verify that Image Builder is running
+      # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
         run: |
-          docker images
-          docker run -t --rm --privileged -v $(pwd):/repo:ro --name imagebuilder imagebuilder
-          docker ps --all
-          docker exec -t imagebuilder composer-cli status show
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+
+      - name: Start the Image Builder container
+        run: docker run --detached --rm --privileged -v $(pwd):/repo:ro --name imagebuilder imagebuilder
+          
+      - name: Verify Image Builder is running
+        run: docker exec -t imagebuilder composer-cli status show
+
