@@ -21,6 +21,9 @@ jobs:
             -v $(pwd):/repo:ro \
             --name imagebuilder \
             quay.io/major/centos-imagebuilder:latest
+          docker ps --all
 
       - name: Verify that Image Builder is running
-        run: docker exec imagebuilder composer-cli status show
+        run: |
+          docker ps --all
+          docker exec imagebuilder composer-cli status show
