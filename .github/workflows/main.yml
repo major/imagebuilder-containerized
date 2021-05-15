@@ -25,4 +25,5 @@ jobs:
       - name: Verify that Image Builder is running
         run: |
           docker ps --all
+          echo ${{ job.services.imagebuilder }}
           docker exec imagebuilder composer-cli status show
