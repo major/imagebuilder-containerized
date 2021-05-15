@@ -25,5 +25,6 @@ jobs:
       - name: Verify that Image Builder is running
         run: |
           docker ps --all
-          echo ${{ job.services.imagebuilder }}
-          docker exec imagebuilder composer-cli status show
+          docker run --rm --privileged -v $(pwd):/repo:ro --name imagebuilder-manual quay.io/major/centos-imagebuilder
+          #echo ${{ job.services.imagebuilder }}
+          #docker exec imagebuilder composer-cli status show
