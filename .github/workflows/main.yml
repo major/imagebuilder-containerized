@@ -23,4 +23,4 @@ jobs:
             quay.io/major/centos-imagebuilder:latest
 
       - name: Verify that Image Builder is running
-        run: docker exec --it imagebuilder composer-cli status show
+        run: docker exec -it imagebuilder composer-cli status show
