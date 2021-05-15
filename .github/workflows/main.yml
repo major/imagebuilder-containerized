@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+
+      - name: Start Image Builder container
+        run: |
+          docker run -d --rm -it --privileged \
+            -v $(pwd):/repo:ro \
+            --name imagebuilder \
+            quay.io/major/centos-imagebuilder:latest
+
+      - name: Verify that Image Builder is running
+        run: docker exec --it imagebuilder composer-cli status show
