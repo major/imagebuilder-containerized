@@ -58,5 +58,10 @@ jobs:
         run: docker run --detach --rm --privileged -v $(pwd):/repo:ro --name imagebuilder imagebuilder
           
       - name: Verify Image Builder is running
-        run: docker exec -t imagebuilder composer-cli status show
+        run: |
+          for i in `seq 1 10`; do
+            docker ps
+            docker exec -t imagebuilder composer-cli status show && break
+            sleep 1  
+          done
 
