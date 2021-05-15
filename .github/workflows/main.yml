@@ -43,6 +43,15 @@ jobs:
           rm -rf /tmp/.buildx-cache
           mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
+      - name: Fill in the AWS template
+        run: |
+          cat /shared/aws-template.toml | envsubst > /shared/aws-config.toml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_S3_BUCKET: major-aws-image-import
+          AWS_DEFAULT_REGION: us-east-1
+
       - name: Start the Image Builder container
         run: |
           docker run --detach --rm --privileged \
@@ -65,13 +74,15 @@ jobs:
       - name: Build the zsh image
         run: |
           #!/bin/bash
+          docker exec -t imagebuilder journalctl -af &
           docker exec -t imagebuilder \
-            composer-cli --json compose start zsh qcow2 | tee compose_start.json
+              composer-cli compose start zsh ami image-from-container /repo/aws-config.toml
+
           COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
           while true; do
               docker exec -t imagebuilder \
-                  composer-cli --json compose info "${COMPOSE_ID}" | tee compose_info.json
+                  composer-cli --json compose info "${COMPOSE_ID}" | tee compose_info.json > /dev/null
               COMPOSE_STATUS=$(jq -r '.queue_status' compose_info.json)
 
               # Is the compose finished?
@@ -81,18 +92,10 @@ jobs:
               else
                   echo "Compose still running..."
               fi
-
-              # Wait 15 seconds and try again.
-              sleep 15
+              sleep 30
           done
 
           if [[ $COMPOSE_STATUS != FINISHED ]]; then
               echo "Something went wrong with the compose. 😢"
               exit 1
           fi
-          
-          docker exec -t imagebuilder \
-            "cd /repo && composer-cli compose image ${COMPOSE_ID}"
-
-      - name: Review contents of shared directory
-        run: ls -alh shared
