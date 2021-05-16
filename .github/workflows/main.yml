@@ -74,11 +74,11 @@ jobs:
       - name: Build the zsh image
         run: |
           #!/bin/bash
-          docker exec -t imagebuilder journalctl -af &
           docker exec -t imagebuilder \
               composer-cli --json compose start zsh ami image-from-container /repo/aws-config.toml | tee compose_start.json
-
           COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
+
+          docker exec -t imagebuilder journalctl -af &
 
           while true; do
               docker exec -t imagebuilder \
