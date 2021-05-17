@@ -1,0 +1,30 @@
+name = "test"
+description = "Basic Image Builder test"
+version = "0.0.1"
+modules = []
+groups = []
+
+[[packages]]
+name = "cockpit"
+version = "*"
+
+[[packages]]
+name = "cockpit-composer"
+version = "*"
+
+[[packages]]
+name = "osbuild-composer"
+version = "*"
+
+[customizations]
+hostname = "imagebuilder"
+
+[customizations.firewall]
+ports = ["22:tcp", "80:tcp", "9090:tcp",]
+
+[customizations.services]
+enabled = ["cockpit.socket", "osbuild-composer.socket"]
+
+[customizations.timezone]
+timezone = "US/Central"
+ntpservers = ["0.north-america.pool.ntp.org", "1.north-america.pool.ntp.org"]

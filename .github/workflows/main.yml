@@ -66,16 +66,16 @@ jobs:
             docker exec -t imagebuilder composer-cli status show && break
           done
 
-      - name: Push the zsh blueprint
+      - name: Push the blueprint
         run: |
-          docker exec -t imagebuilder composer-cli blueprints push /repo/zsh-blueprint.toml
+          docker exec -t imagebuilder composer-cli blueprints push /repo/test-blueprint.toml
           docker exec -t imagebuilder composer-cli blueprints list
 
-      - name: Build the zsh image
+      - name: Build the test image
         run: |
           #!/bin/bash
           docker exec -t imagebuilder \
-              composer-cli --json compose start zsh ami image-from-container /repo/aws-config.toml | tee compose_start.json
+              composer-cli --json compose start test ami image-from-container /repo/aws-config.toml | tee compose_start.json
           COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
           docker exec -t imagebuilder journalctl -af -n0 &
