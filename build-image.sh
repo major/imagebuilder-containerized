@@ -31,7 +31,7 @@ composer-cli --json compose start zsh ami image-from-container /repo/aws-config.
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
 # Watch the logs while the build runs.
-docker-exec -t imagebuilder journalctl -af -n0 &
+docker-exec journalctl -af -n0 &
 
 while true; do
     composer-cli --json compose info "${COMPOSE_ID}" | tee compose_info.json > /dev/null
