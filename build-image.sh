@@ -27,7 +27,8 @@ composer-cli blueprints depsolve zsh
 composer-cli blueprints list
 
 # Start the build.
-composer-cli --json compose start zsh ami image-from-container /repo/aws-config.toml | tee compose_start.json
+#composer-cli --json compose start zsh ami image-from-container /repo/aws-config.toml | tee compose_start.json
+composer-cli --json compose start zsh ami | tee compose_start.json
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
 # Watch the logs while the build runs.
