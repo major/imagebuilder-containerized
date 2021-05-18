@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euxo pipefail
+set -euo pipefail
 
 docker-exec () {
     docker exec -t imagebuilder $@
