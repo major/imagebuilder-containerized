@@ -96,6 +96,10 @@ jobs:
           done
 
           if [[ $COMPOSE_STATUS != FINISHED ]]; then
+              docker exec -t imagebuilder \
+                  composer-cli compose logs ${COMPOSE_ID}
+              docker exec -t imagebuilder \
+                  tar -axf /${COMPOSE_ID}-logs.tar logs/osbuild.log -O
               echo "Something went wrong with the compose. 😢"
               exit 1
           fi
