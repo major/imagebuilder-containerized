@@ -1,6 +1,8 @@
 #!/bin/bash
 set -euo pipefail
 
+BLUEPRINT_NAME=centos-base
+
 docker-exec () {
     docker exec -t imagebuilder $@
 }
@@ -22,13 +24,13 @@ for i in `seq 1 10`; do
 done
 
 # Push the blueprint and depsolve.
-composer-cli blueprints push /repo/zsh-blueprint.toml
-composer-cli blueprints depsolve zsh
+composer-cli blueprints push /repo/${BLUEPRINT_NAME}-blueprint.toml
+composer-cli blueprints depsolve ${BLUEPRINT_NAME}
 composer-cli blueprints list
 
 # Start the build.
-#composer-cli --json compose start zsh ami image-from-container /repo/aws-config.toml | tee compose_start.json
-composer-cli --json compose start zsh ami | tee compose_start.json
+#composer-cli --json compose start ${BLUEPRINT_NAME} ami image-from-container /repo/aws-config.toml | tee compose_start.json
+composer-cli --json compose start ${BLUEPRINT_NAME} qcow2 | tee compose_start.json
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
 # Watch the logs while the build runs.

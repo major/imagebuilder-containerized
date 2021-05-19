@@ -1,9 +1,0 @@
-name = "zsh"
-description = "Super basic with zsh"
-version = "0.0.1"
-modules = []
-groups = []
-
-[[packages]]
-name = "zsh"
-version = "*"
