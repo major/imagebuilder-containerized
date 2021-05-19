@@ -1,5 +1,5 @@
 #!/bin/bash
-set -euo pipefail
+set -euxo pipefail
 
 BLUEPRINT_NAME=centos-base
 
@@ -30,7 +30,7 @@ composer-cli blueprints list
 
 # Start the build.
 #composer-cli --json compose start ${BLUEPRINT_NAME} ami image-from-container /repo/aws-config.toml | tee compose_start.json
-composer-cli --json compose start ${BLUEPRINT_NAME} qcow2 | tee compose_start.json
+composer-cli --json compose start ${BLUEPRINT_NAME} ami | tee compose_start.json
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
 # Watch the logs while the build runs.
