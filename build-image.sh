@@ -25,7 +25,7 @@ done
 
 # Push the blueprint and depsolve.
 composer-cli blueprints push /repo/${BLUEPRINT_NAME}-blueprint.toml
-composer-cli blueprints depsolve ${BLUEPRINT_NAME}
+composer-cli blueprints depsolve ${BLUEPRINT_NAME} > /dev/null
 composer-cli blueprints list
 
 # Start the build.
