@@ -56,3 +56,8 @@ if [[ $COMPOSE_STATUS != FINISHED ]]; then
     echo "Something went wrong with the compose. 😢"
     exit 1
 fi
+
+# Download the image.
+composer-cli compose image ${COMPOSE_ID}
+docker-exec tar -xf /${COMPOSE_ID}-commit.tar -C /repo
+ls -alh shared
