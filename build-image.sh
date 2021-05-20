@@ -30,7 +30,7 @@ composer-cli blueprints list
 
 # Start the build.
 # composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-$(uuid) /repo/aws-config.toml | tee compose_start.json
-composer-cli --json compose start ${BLUEPRINT_NAME} ami
+composer-cli --json compose start ${BLUEPRINT_NAME} ami | tee compose_start.json
 
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
