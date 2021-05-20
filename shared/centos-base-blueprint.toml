@@ -19,3 +19,6 @@ version = "*"
 [[packages]]
 name = "tmux"
 version = "*"
+
+[customizations.services]
+enabled = ["osbuild-composer.socket"]
