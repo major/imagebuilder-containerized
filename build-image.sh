@@ -2,6 +2,7 @@
 set -euo pipefail
 
 BLUEPRINT_NAME=centos-base
+SHIP_TO_AWS=yes
 
 docker-exec () {
     docker exec -t imagebuilder $@
@@ -29,8 +30,11 @@ composer-cli blueprints depsolve ${BLUEPRINT_NAME} > /dev/null
 composer-cli blueprints list
 
 # Start the build.
-# composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-$(uuid) /repo/aws-config.toml | tee compose_start.json
-composer-cli --json compose start ${BLUEPRINT_NAME} ami | tee compose_start.json
+if [[ $SHIP_TO_AWS == "yes" ]]; then
+    composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-$(uuid) /repo/aws-config.toml | tee compose_start.json
+else
+    composer-cli --json compose start ${BLUEPRINT_NAME} ami | tee compose_start.json
+fi
 
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
