@@ -29,8 +29,8 @@ composer-cli blueprints depsolve ${BLUEPRINT_NAME} > /dev/null
 composer-cli blueprints list
 
 # Start the build.
-#composer-cli --json compose start ${BLUEPRINT_NAME} ami image-from-container /repo/aws-config.toml | tee compose_start.json
-composer-cli --json compose start ${BLUEPRINT_NAME} ami | tee compose_start.json
+composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-$(uuid) /repo/aws-config.toml | tee compose_start.json
+
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
 # Watch the logs while the build runs.
@@ -56,8 +56,3 @@ if [[ $COMPOSE_STATUS != FINISHED ]]; then
     echo "Something went wrong with the compose. 😢"
     exit 1
 fi
-
-# Download the image.
-composer-cli compose image ${COMPOSE_ID}
-docker-exec tar -xf /${COMPOSE_ID}-commit.tar -C /repo
-ls -alh shared
