@@ -9,5 +9,9 @@ name = "podman"
 version = "*"
 
 [[packages]]
+name = "osbuild"
+version = "*"
+
+[[packages]]
 name = "tmux"
 version = "*"
