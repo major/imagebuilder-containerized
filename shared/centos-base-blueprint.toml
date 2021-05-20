@@ -13,5 +13,9 @@ name = "osbuild"
 version = "*"
 
 [[packages]]
+name = "osbuild-composer"
+version = "*"
+
+[[packages]]
 name = "tmux"
 version = "*"
