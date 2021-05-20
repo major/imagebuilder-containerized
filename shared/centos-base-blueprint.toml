@@ -5,5 +5,9 @@ modules = []
 groups = []
 
 [[packages]]
+name = "podman"
+version = "*"
+
+[[packages]]
 name = "tmux"
 version = "*"

@@ -29,7 +29,8 @@ composer-cli blueprints depsolve ${BLUEPRINT_NAME} > /dev/null
 composer-cli blueprints list
 
 # Start the build.
-composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-$(uuid) /repo/aws-config.toml | tee compose_start.json
+# composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-$(uuid) /repo/aws-config.toml | tee compose_start.json
+composer-cli --json compose start ${BLUEPRINT_NAME} ami
 
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
@@ -44,10 +45,8 @@ while true; do
     if [[ $COMPOSE_STATUS != RUNNING ]] && [[ $COMPOSE_STATUS != WAITING ]]; then
         echo "Compose finished."
         break
-    else
-        echo "Compose still running..."
     fi
-    sleep 30
+    sleep 5
 done
 
 if [[ $COMPOSE_STATUS != FINISHED ]]; then
