@@ -21,4 +21,4 @@ name = "tmux"
 version = "*"
 
 [customizations.services]
-enabled = ["osbuild-composer.socket"]
+enabled = ["cockpit.socket", "osbuild-composer.socket"]
