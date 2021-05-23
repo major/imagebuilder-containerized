@@ -12,8 +12,6 @@ composer-cli () {
     docker-exec composer-cli $@
 }
 
-IMAGE_UUID=$(docker-exec uuid)
-
 # Start the docker container.
 docker run --detach --rm --privileged \
     -v $(pwd)/shared:/repo \
@@ -30,6 +28,8 @@ done
 composer-cli blueprints push /repo/${BLUEPRINT_NAME}-blueprint.toml
 composer-cli blueprints depsolve ${BLUEPRINT_NAME} > /dev/null
 composer-cli blueprints list
+
+IMAGE_UUID=$(docker-exec uuid)
 
 # Start the build.
 if [[ $SHIP_TO_AWS == "yes" ]]; then
