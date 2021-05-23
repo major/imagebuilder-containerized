@@ -5,7 +5,7 @@ modules = []
 groups = []
 
 [[packages]]
-name = "podman"
+name = "cockpit-composer"
 version = "*"
 
 [[packages]]
