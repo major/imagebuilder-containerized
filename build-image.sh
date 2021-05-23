@@ -12,6 +12,8 @@ composer-cli () {
     docker-exec composer-cli $@
 }
 
+IMAGE_UUID=$(docker-exec uuid)
+
 # Start the docker container.
 docker run --detach --rm --privileged \
     -v $(pwd)/shared:/repo \
@@ -31,7 +33,7 @@ composer-cli blueprints list
 
 # Start the build.
 if [[ $SHIP_TO_AWS == "yes" ]]; then
-    composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-$(uuid) /repo/aws-config.toml | tee compose_start.json
+    composer-cli --json compose start ${BLUEPRINT_NAME} ami github-actions-${IMAGE_UUID} /repo/aws-config.toml | tee compose_start.json
 else
     composer-cli --json compose start ${BLUEPRINT_NAME} ami | tee compose_start.json
 fi
