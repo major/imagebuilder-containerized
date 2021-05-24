@@ -41,7 +41,7 @@ fi
 COMPOSE_ID=$(jq -r '.build_id' compose_start.json)
 
 # Watch the logs while the build runs.
-docker-exec journalctl -af -n0 &
+docker-exec journalctl -af &
 
 while true; do
     composer-cli --json compose info "${COMPOSE_ID}" | tee compose_info.json > /dev/null
